@@ -8,6 +8,14 @@
 #include "StopWaitRdtSender.h"
 #include "StopWaitRdtReceiver.h"
 
+#ifdef __linux
+#define INPUT_FILENAME "/home/gao/input.txt"
+#define OUTPUT_FILENAME "/home/gao/output.txt"
+#else
+#define INPUT_FILENAME "C:\\Users\\gaome\\Desktop\\input.txt"
+#define OUTPUT_FILENAME "C:\\Users\\gaome\\Desktop\\output.txt"
+#endif
+
 
 int main(int argc, char* argv[])
 {
@@ -18,8 +26,8 @@ int main(int argc, char* argv[])
 	pns->init();
 	pns->setRtdSender(ps);
 	pns->setRtdReceiver(pr);
-	pns->setInputFile("C:\\Users\\gaome\\Desktop\\input.txt");
-	pns->setOutputFile("C:\\Users\\gaome\\Desktop\\output.txt");
+	pns->setInputFile(INPUT_FILENAME);
+	pns->setOutputFile(OUTPUT_FILENAME);
 
 	pns->start();
 
