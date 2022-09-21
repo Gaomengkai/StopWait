@@ -3,11 +3,11 @@
 #include "DataStructure.h"
 
 struct Tool{
-	/* ´òÓ¡PacketµÄĞÅÏ¢*/
+	/* æ‰“å°Packetçš„ä¿¡æ¯*/
 	virtual void printPacket(const char * description, const Packet &packet) = 0;
-	/*¼ÆËãÒ»¸öPacketµÄĞ£ÑéºÍ*/
+	/*è®¡ç®—ä¸€ä¸ªPacketçš„æ ¡éªŒå’Œ*/
 	virtual int calculateCheckSum(const Packet &packet) = 0;
-	/*²úÉúÒ»¸ö¾ùÔÈ·Ö²¼µÄ[0-1]¼äµÄËæ»úÊı*/
+	/*äº§ç”Ÿä¸€ä¸ªå‡åŒ€åˆ†å¸ƒçš„[0-1]é—´çš„éšæœºæ•°*/
 	virtual double random() = 0;
 
 	virtual ~Tool() = 0;

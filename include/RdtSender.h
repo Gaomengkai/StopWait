@@ -2,15 +2,15 @@
 #define RDT_SENDER_H
 
 #include "DataStructure.h"
-//¶¨ÒåRdtSender³éÏóÀà£¬¹æ¶¨ÁË±ØÐëÊµÏÖµÄÈý¸ö½Ó¿Ú·½·¨
-//¾ßÌåµÄ×ÓÀà±ÈÈçStopWaitRdtSender¡¢GBNRdtSender±ØÐë¸ø³öÕâÈý¸ö·½·¨µÄ¾ßÌåÊµÏÖ
-//Ö»¿¼ÂÇµ¥Ïò´«Êä£¬¼´·¢ËÍ·½Ö»·¢ËÍÊý¾ÝºÍ½ÓÊÜÈ·ÈÏ
+//å®šä¹‰RdtSenderæŠ½è±¡ç±»ï¼Œè§„å®šäº†å¿…é¡»å®žçŽ°çš„ä¸‰ä¸ªæŽ¥å£æ–¹æ³•
+//å…·ä½“çš„å­ç±»æ¯”å¦‚StopWaitRdtSenderã€GBNRdtSenderå¿…é¡»ç»™å‡ºè¿™ä¸‰ä¸ªæ–¹æ³•çš„å…·ä½“å®žçŽ°
+//åªè€ƒè™‘å•å‘ä¼ è¾“ï¼Œå³å‘é€æ–¹åªå‘é€æ•°æ®å’ŒæŽ¥å—ç¡®è®¤
 struct  RdtSender
 {
-	virtual bool send(const Message &message) = 0;						//·¢ËÍÓ¦ÓÃ²ãÏÂÀ´µÄMessage£¬ÓÉNetworkServiceµ÷ÓÃ,Èç¹û·¢ËÍ·½³É¹¦µØ½«Message·¢ËÍµ½ÍøÂç²ã£¬·µ»Øtrue;Èç¹ûÒòÎª·¢ËÍ·½´¦ÓÚµÈ´ýÈ·ÈÏ×´Ì¬»ò·¢ËÍ´°¿ÚÒÑÂú¶ø¾Ü¾ø·¢ËÍMessage£¬Ôò·µ»Øfalse
-	virtual void receive(const Packet &ackPkt) = 0;						//½ÓÊÜÈ·ÈÏAck£¬½«±»NetworkServiceµ÷ÓÃ	
-	virtual void timeoutHandler(int seqNum) = 0;					//Timeout handler£¬½«±»NetworkServiceµ÷ÓÃ
-	virtual bool getWaitingState() = 0;								//·µ»ØRdtSenderÊÇ·ñ´¦ÓÚµÈ´ý×´Ì¬£¬Èç¹û·¢ËÍ·½ÕýµÈ´ýÈ·ÈÏ»òÕß·¢ËÍ´°¿ÚÒÑÂú£¬·µ»Øtrue
+	virtual bool send(const Message &message) = 0;						//å‘é€åº”ç”¨å±‚ä¸‹æ¥çš„Messageï¼Œç”±NetworkServiceè°ƒç”¨,å¦‚æžœå‘é€æ–¹æˆåŠŸåœ°å°†Messageå‘é€åˆ°ç½‘ç»œå±‚ï¼Œè¿”å›žtrue;å¦‚æžœå› ä¸ºå‘é€æ–¹å¤„äºŽç­‰å¾…ç¡®è®¤çŠ¶æ€æˆ–å‘é€çª—å£å·²æ»¡è€Œæ‹’ç»å‘é€Messageï¼Œåˆ™è¿”å›žfalse
+	virtual void receive(const Packet &ackPkt) = 0;						//æŽ¥å—ç¡®è®¤Ackï¼Œå°†è¢«NetworkServiceè°ƒç”¨	
+	virtual void timeoutHandler(int seqNum) = 0;					//Timeout handlerï¼Œå°†è¢«NetworkServiceè°ƒç”¨
+	virtual bool getWaitingState() = 0;								//è¿”å›žRdtSenderæ˜¯å¦å¤„äºŽç­‰å¾…çŠ¶æ€ï¼Œå¦‚æžœå‘é€æ–¹æ­£ç­‰å¾…ç¡®è®¤æˆ–è€…å‘é€çª—å£å·²æ»¡ï¼Œè¿”å›žtrue
 	virtual ~RdtSender() = 0;
 };
 

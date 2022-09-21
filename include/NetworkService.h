@@ -6,22 +6,22 @@
 #include "RdtReceiver.h"
 
 
-//¶¨ÒåNetworkService³éÏóÀà£¬¹æ¶¨ÁËÑ§ÉúÊµÏÖµÄRdtSenderºÍRdtReceiver¿ÉÒÔµ÷ÓÃµÄµÄ½Ó¿Ú·½·¨
+//å®šä¹‰NetworkServiceæŠ½è±¡ç±»ï¼Œè§„å®šäº†å­¦ç”Ÿå®ç°çš„RdtSenderå’ŒRdtReceiverå¯ä»¥è°ƒç”¨çš„çš„æ¥å£æ–¹æ³•
 struct  NetworkService {
 
-	virtual void startTimer(RandomEventTarget target, int timeOut,int seqNum) = 0;	//·¢ËÍ·½Æô¶¯¶¨Ê±Æ÷£¬ÓÉRdtSenderµ÷ÓÃ
-	virtual void stopTimer(RandomEventTarget target,int seqNum) = 0;				//·¢ËÍ·½Í£Ö¹¶¨Ê±Æ÷£¬ÓÉRdtSenderµ÷ÓÃ
-	virtual void sendToNetworkLayer(RandomEventTarget target, Packet pkt) = 0;		//½«Êı¾İ°ü·¢ËÍµ½ÍøÂç²ã£¬ÓÉRdtSender»òRdtReceiverµ÷ÓÃ
-	virtual void delivertoAppLayer(RandomEventTarget target, Message msg) = 0;		//½«Êı¾İ°üÏòÉÏµİ½»µ½Ó¦ÓÃ²ã£¬ÓÉRdtReceiverµ÷ÓÃ
+	virtual void startTimer(RandomEventTarget target, int timeOut,int seqNum) = 0;	//å‘é€æ–¹å¯åŠ¨å®šæ—¶å™¨ï¼Œç”±RdtSenderè°ƒç”¨
+	virtual void stopTimer(RandomEventTarget target,int seqNum) = 0;				//å‘é€æ–¹åœæ­¢å®šæ—¶å™¨ï¼Œç”±RdtSenderè°ƒç”¨
+	virtual void sendToNetworkLayer(RandomEventTarget target, Packet pkt) = 0;		//å°†æ•°æ®åŒ…å‘é€åˆ°ç½‘ç»œå±‚ï¼Œç”±RdtSenderæˆ–RdtReceiverè°ƒç”¨
+	virtual void delivertoAppLayer(RandomEventTarget target, Message msg) = 0;		//å°†æ•°æ®åŒ…å‘ä¸Šé€’äº¤åˆ°åº”ç”¨å±‚ï¼Œç”±RdtReceiverè°ƒç”¨
 
-	virtual void init() = 0;														//³õÊ¼»¯ÍøÂç»·¾³£¬ÔÚmainÀïµ÷ÓÃ
-	virtual void start() = 0;														//Æô¶¯ÍøÂç»·¾³£¬ÔÚmainÀïµ÷ÓÃ
-	virtual void setRtdSender(RdtSender *ps) = 0;									//ÉèÖÃ¾ßÌåµÄ·¢ËÍ·½¶ÔÏó
-	virtual void setRtdReceiver(RdtReceiver *ps) = 0;								//ÉèÖÃ¾ßÌåµÄ·¢ËÍ·½¶ÔÏó
-	virtual void setInputFile(const char *ifile) = 0;								//ÉèÖÃÊäÈëÎÄ¼şÂ·¾¶
-	virtual void setOutputFile(const char *ofile) = 0;								//ÉèÖÃÊä³öÎÄ¼şÂ·¾¶
+	virtual void init() = 0;														//åˆå§‹åŒ–ç½‘ç»œç¯å¢ƒï¼Œåœ¨mainé‡Œè°ƒç”¨
+	virtual void start() = 0;														//å¯åŠ¨ç½‘ç»œç¯å¢ƒï¼Œåœ¨mainé‡Œè°ƒç”¨
+	virtual void setRtdSender(RdtSender *ps) = 0;									//è®¾ç½®å…·ä½“çš„å‘é€æ–¹å¯¹è±¡
+	virtual void setRtdReceiver(RdtReceiver *ps) = 0;								//è®¾ç½®å…·ä½“çš„å‘é€æ–¹å¯¹è±¡
+	virtual void setInputFile(const char *ifile) = 0;								//è®¾ç½®è¾“å…¥æ–‡ä»¶è·¯å¾„
+	virtual void setOutputFile(const char *ofile) = 0;								//è®¾ç½®è¾“å‡ºæ–‡ä»¶è·¯å¾„
 	virtual ~NetworkService() = 0;
-	virtual void setRunMode(int mode = 0) = 0;										//ÉèÖÃÔËĞĞÄ£Ê½£¬0£ºVERBOSEÄ£Ê½£¬1£º°²¾²Ä£Ê½
+	virtual void setRunMode(int mode = 0) = 0;										//è®¾ç½®è¿è¡Œæ¨¡å¼ï¼Œ0ï¼šVERBOSEæ¨¡å¼ï¼Œ1ï¼šå®‰é™æ¨¡å¼
 };
 
 #endif

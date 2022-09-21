@@ -9,7 +9,7 @@
 #include <string.h>
 using namespace std;
 
-extern  Tool *pUtils;						//指向唯一的工具类实例，只在main函数结束前delete
-extern  NetworkService *pns;				//指向唯一的模拟网络环境类实例，只在main函数结束前delete
+extern  Tool *pUtils;						//鎸囧悜鍞竴鐨勫伐鍏风被瀹炰緥锛屽彧鍦╩ain鍑芥暟缁撴潫鍓峝elete
+extern  NetworkService *pns;				//鎸囧悜鍞竴鐨勬ā鎷熺綉缁滅幆澧冪被瀹炰緥锛屽彧鍦╩ain鍑芥暟缁撴潫鍓峝elete
 
 #endif

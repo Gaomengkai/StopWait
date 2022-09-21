@@ -3,12 +3,12 @@
 
 
 #include "DataStructure.h"
-//¶¨ÒåRdtReceiver³éÏóÀà£¬¹æ¶¨ÁË±ØĞëÊµÏÖµÄÒ»¸ö½Ó¿Ú·½·¨
-//¾ßÌåµÄ×ÓÀà±ÈÈçStopWaitRdtReceiver¡¢GBNRdtReceiver±ØĞë¸ø³öÕâÒ»¸ö·½·¨µÄ¾ßÌåÊµÏÖ
-//Ö»¿¼ÂÇµ¥Ïò´«Êä£¬¼´½ÓÊÕ·½Ö»½ÓÊÕÊı¾İ
+//å®šä¹‰RdtReceiveræŠ½è±¡ç±»ï¼Œè§„å®šäº†å¿…é¡»å®ç°çš„ä¸€ä¸ªæ¥å£æ–¹æ³•
+//å…·ä½“çš„å­ç±»æ¯”å¦‚StopWaitRdtReceiverã€GBNRdtReceiverå¿…é¡»ç»™å‡ºè¿™ä¸€ä¸ªæ–¹æ³•çš„å…·ä½“å®ç°
+//åªè€ƒè™‘å•å‘ä¼ è¾“ï¼Œå³æ¥æ”¶æ–¹åªæ¥æ”¶æ•°æ®
 struct  RdtReceiver
 {
-	virtual void receive(const Packet &packet) = 0;		//½ÓÊÕ±¨ÎÄ£¬½«±»NetworkServiceµ÷ÓÃ	
+	virtual void receive(const Packet &packet) = 0;		//æ¥æ”¶æŠ¥æ–‡ï¼Œå°†è¢«NetworkServiceè°ƒç”¨	
 	virtual ~RdtReceiver() = 0;
 };
 

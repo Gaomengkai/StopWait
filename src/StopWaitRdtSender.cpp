@@ -22,50 +22,50 @@ bool StopWaitRdtSender::getWaitingState() {
 
 
 bool StopWaitRdtSender::send(const Message &message) {
-	if (this->waitingState) { //·¢ËÍ·½´¦ÓÚµÈ´ıÈ·ÈÏ×´Ì¬
+	if (this->waitingState) { //å‘é€æ–¹å¤„äºç­‰å¾…ç¡®è®¤çŠ¶æ€
 		return false;
 	}
 
-	this->packetWaitingAck.acknum = -1; //ºöÂÔ¸Ã×Ö¶Î
+	this->packetWaitingAck.acknum = -1; //å¿½ç•¥è¯¥å­—æ®µ
 	this->packetWaitingAck.seqnum = this->expectSequenceNumberSend;
 	this->packetWaitingAck.checksum = 0;
 	memcpy(this->packetWaitingAck.payload, message.data, sizeof(message.data));
 	this->packetWaitingAck.checksum = pUtils->calculateCheckSum(this->packetWaitingAck);
-	pUtils->printPacket("·¢ËÍ·½·¢ËÍ±¨ÎÄ", this->packetWaitingAck);
-	pns->startTimer(SENDER, Configuration::TIME_OUT,this->packetWaitingAck.seqnum);			//Æô¶¯·¢ËÍ·½¶¨Ê±Æ÷
-	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//µ÷ÓÃÄ£ÄâÍøÂç»·¾³µÄsendToNetworkLayer£¬Í¨¹ıÍøÂç²ã·¢ËÍµ½¶Ô·½
+	pUtils->printPacket("å‘é€æ–¹å‘é€æŠ¥æ–‡", this->packetWaitingAck);
+	pns->startTimer(SENDER, Configuration::TIME_OUT,this->packetWaitingAck.seqnum);			//å¯åŠ¨å‘é€æ–¹å®šæ—¶å™¨
+	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//è°ƒç”¨æ¨¡æ‹Ÿç½‘ç»œç¯å¢ƒçš„sendToNetworkLayerï¼Œé€šè¿‡ç½‘ç»œå±‚å‘é€åˆ°å¯¹æ–¹
 
-	this->waitingState = true;																					//½øÈëµÈ´ı×´Ì¬
+	this->waitingState = true;																					//è¿›å…¥ç­‰å¾…çŠ¶æ€
 	return true;
 }
 
 void StopWaitRdtSender::receive(const Packet &ackPkt) {
-	if (this->waitingState == true) {//Èç¹û·¢ËÍ·½´¦ÓÚµÈ´ıackµÄ×´Ì¬£¬×÷ÈçÏÂ´¦Àí£»·ñÔòÊ²Ã´¶¼²»×ö
-		//¼ì²éĞ£ÑéºÍÊÇ·ñÕıÈ·
+	if (this->waitingState == true) {//å¦‚æœå‘é€æ–¹å¤„äºç­‰å¾…ackçš„çŠ¶æ€ï¼Œä½œå¦‚ä¸‹å¤„ç†ï¼›å¦åˆ™ä»€ä¹ˆéƒ½ä¸åš
+		//æ£€æŸ¥æ ¡éªŒå’Œæ˜¯å¦æ­£ç¡®
 		int checkSum = pUtils->calculateCheckSum(ackPkt);
 
-		//Èç¹ûĞ£ÑéºÍÕıÈ·£¬²¢ÇÒÈ·ÈÏĞòºÅ=·¢ËÍ·½ÒÑ·¢ËÍ²¢µÈ´ıÈ·ÈÏµÄÊı¾İ°üĞòºÅ
+		//å¦‚æœæ ¡éªŒå’Œæ­£ç¡®ï¼Œå¹¶ä¸”ç¡®è®¤åºå·=å‘é€æ–¹å·²å‘é€å¹¶ç­‰å¾…ç¡®è®¤çš„æ•°æ®åŒ…åºå·
 		if (checkSum == ackPkt.checksum && ackPkt.acknum == this->packetWaitingAck.seqnum) {
-			this->expectSequenceNumberSend = 1 - this->expectSequenceNumberSend;			//ÏÂÒ»¸ö·¢ËÍĞòºÅÔÚ0-1Ö®¼äÇĞ»»
+			this->expectSequenceNumberSend = 1 - this->expectSequenceNumberSend;			//ä¸‹ä¸€ä¸ªå‘é€åºå·åœ¨0-1ä¹‹é—´åˆ‡æ¢
 			this->waitingState = false;
-			pUtils->printPacket("·¢ËÍ·½ÕıÈ·ÊÕµ½È·ÈÏ", ackPkt);
-			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);		//¹Ø±Õ¶¨Ê±Æ÷
+			pUtils->printPacket("å‘é€æ–¹æ­£ç¡®æ”¶åˆ°ç¡®è®¤", ackPkt);
+			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);		//å…³é—­å®šæ—¶å™¨
 		}
 		else {
-			pUtils->printPacket("·¢ËÍ·½Ã»ÓĞÕıÈ·ÊÕµ½È·ÈÏ£¬ÖØ·¢ÉÏ´Î·¢ËÍµÄ±¨ÎÄ", this->packetWaitingAck);
-			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);									//Ê×ÏÈ¹Ø±Õ¶¨Ê±Æ÷
-			pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWaitingAck.seqnum);			//ÖØĞÂÆô¶¯·¢ËÍ·½¶¨Ê±Æ÷
-			pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//ÖØĞÂ·¢ËÍÊı¾İ°ü
+			pUtils->printPacket("å‘é€æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°ç¡®è®¤ï¼Œé‡å‘ä¸Šæ¬¡å‘é€çš„æŠ¥æ–‡", this->packetWaitingAck);
+			pns->stopTimer(SENDER, this->packetWaitingAck.seqnum);									//é¦–å…ˆå…³é—­å®šæ—¶å™¨
+			pns->startTimer(SENDER, Configuration::TIME_OUT, this->packetWaitingAck.seqnum);			//é‡æ–°å¯åŠ¨å‘é€æ–¹å®šæ—¶å™¨
+			pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//é‡æ–°å‘é€æ•°æ®åŒ…
 
 		}
 	}	
 }
 
 void StopWaitRdtSender::timeoutHandler(int seqNum) {
-	//Î¨Ò»Ò»¸ö¶¨Ê±Æ÷,ÎŞĞè¿¼ÂÇseqNum
-	pUtils->printPacket("·¢ËÍ·½¶¨Ê±Æ÷Ê±¼äµ½£¬ÖØ·¢ÉÏ´Î·¢ËÍµÄ±¨ÎÄ", this->packetWaitingAck);
-	pns->stopTimer(SENDER,seqNum);										//Ê×ÏÈ¹Ø±Õ¶¨Ê±Æ÷
-	pns->startTimer(SENDER, Configuration::TIME_OUT,seqNum);			//ÖØĞÂÆô¶¯·¢ËÍ·½¶¨Ê±Æ÷
-	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);			//ÖØĞÂ·¢ËÍÊı¾İ°ü
+	//å”¯ä¸€ä¸€ä¸ªå®šæ—¶å™¨,æ— éœ€è€ƒè™‘seqNum
+	pUtils->printPacket("å‘é€æ–¹å®šæ—¶å™¨æ—¶é—´åˆ°ï¼Œé‡å‘ä¸Šæ¬¡å‘é€çš„æŠ¥æ–‡", this->packetWaitingAck);
+	pns->stopTimer(SENDER,seqNum);										//é¦–å…ˆå…³é—­å®šæ—¶å™¨
+	pns->startTimer(SENDER, Configuration::TIME_OUT,seqNum);			//é‡æ–°å¯åŠ¨å‘é€æ–¹å®šæ—¶å™¨
+	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);			//é‡æ–°å‘é€æ•°æ®åŒ…
 
 }

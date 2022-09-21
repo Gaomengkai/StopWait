@@ -3,10 +3,10 @@
 
 
 
-/* ¶¨ÒåËæ»úÊÂ¼þµÄÄ¿±ê*/
+/* å®šä¹‰éšæœºäº‹ä»¶çš„ç›®æ ‡*/
 enum  RandomEventTarget {
-	SENDER,							//Êý¾Ý·¢ËÍ·½
-	RECEIVER						//Êý¾Ý½ÓÊÕ·½
+	SENDER,							//æ•°æ®å‘é€æ–¹
+	RECEIVER						//æ•°æ®æŽ¥æ”¶æ–¹
 };
 
 #endif

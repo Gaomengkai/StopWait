@@ -4,16 +4,16 @@
 class StopWaitRdtSender :public RdtSender
 {
 private:
-	int expectSequenceNumberSend;	// ÏÂÒ»¸ö·¢ËÍĞòºÅ 
-	bool waitingState;				// ÊÇ·ñ´¦ÓÚµÈ´ıAckµÄ×´Ì¬
-	Packet packetWaitingAck;		//ÒÑ·¢ËÍ²¢µÈ´ıAckµÄÊı¾İ°ü
+	int expectSequenceNumberSend;	// ä¸‹ä¸€ä¸ªå‘é€åºå· 
+	bool waitingState;				// æ˜¯å¦å¤„äºç­‰å¾…Ackçš„çŠ¶æ€
+	Packet packetWaitingAck;		//å·²å‘é€å¹¶ç­‰å¾…Ackçš„æ•°æ®åŒ…
 
 public:
 
 	bool getWaitingState();
-	bool send(const Message &message);						//·¢ËÍÓ¦ÓÃ²ãÏÂÀ´µÄMessage£¬ÓÉNetworkServiceSimulatorµ÷ÓÃ,Èç¹û·¢ËÍ·½³É¹¦µØ½«Message·¢ËÍµ½ÍøÂç²ã£¬·µ»Øtrue;Èç¹ûÒòÎª·¢ËÍ·½´¦ÓÚµÈ´ıÕıÈ·È·ÈÏ×´Ì¬¶ø¾Ü¾ø·¢ËÍMessage£¬Ôò·µ»Øfalse
-	void receive(const Packet &ackPkt);						//½ÓÊÜÈ·ÈÏAck£¬½«±»NetworkServiceSimulatorµ÷ÓÃ	
-	void timeoutHandler(int seqNum);					//Timeout handler£¬½«±»NetworkServiceSimulatorµ÷ÓÃ
+	bool send(const Message &message);						//å‘é€åº”ç”¨å±‚ä¸‹æ¥çš„Messageï¼Œç”±NetworkServiceSimulatorè°ƒç”¨,å¦‚æœå‘é€æ–¹æˆåŠŸåœ°å°†Messageå‘é€åˆ°ç½‘ç»œå±‚ï¼Œè¿”å›true;å¦‚æœå› ä¸ºå‘é€æ–¹å¤„äºç­‰å¾…æ­£ç¡®ç¡®è®¤çŠ¶æ€è€Œæ‹’ç»å‘é€Messageï¼Œåˆ™è¿”å›false
+	void receive(const Packet &ackPkt);						//æ¥å—ç¡®è®¤Ackï¼Œå°†è¢«NetworkServiceSimulatorè°ƒç”¨	
+	void timeoutHandler(int seqNum);					//Timeout handlerï¼Œå°†è¢«NetworkServiceSimulatorè°ƒç”¨
 
 public:
 	StopWaitRdtSender();

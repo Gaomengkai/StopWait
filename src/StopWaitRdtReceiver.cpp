@@ -5,9 +5,9 @@
 
 StopWaitRdtReceiver::StopWaitRdtReceiver():expectSequenceNumberRcvd(0)
 {
-	lastAckPkt.acknum = -1; //³õÊ¼×´Ì¬ÏÂ£¬ÉÏ´Î·¢ËÍµÄÈ·ÈÏ°üµÄÈ·ÈÏĞòºÅÎª-1£¬Ê¹µÃµ±µÚÒ»¸ö½ÓÊÜµÄÊı¾İ°ü³ö´íÊ±¸ÃÈ·ÈÏ±¨ÎÄµÄÈ·ÈÏºÅÎª-1
+	lastAckPkt.acknum = -1; //åˆå§‹çŠ¶æ€ä¸‹ï¼Œä¸Šæ¬¡å‘é€çš„ç¡®è®¤åŒ…çš„ç¡®è®¤åºå·ä¸º-1ï¼Œä½¿å¾—å½“ç¬¬ä¸€ä¸ªæ¥å—çš„æ•°æ®åŒ…å‡ºé”™æ—¶è¯¥ç¡®è®¤æŠ¥æ–‡çš„ç¡®è®¤å·ä¸º-1
 	lastAckPkt.checksum = 0;
-	lastAckPkt.seqnum = -1;	//ºöÂÔ¸Ã×Ö¶Î
+	lastAckPkt.seqnum = -1;	//å¿½ç•¥è¯¥å­—æ®µ
 	for(int i = 0; i < Configuration::PAYLOAD_SIZE;i++){
 		lastAckPkt.payload[i] = '.';
 	}
@@ -20,34 +20,34 @@ StopWaitRdtReceiver::~StopWaitRdtReceiver()
 }
 
 void StopWaitRdtReceiver::receive(const Packet &packet) {
-	//¼ì²éĞ£ÑéºÍÊÇ·ñÕıÈ·
+	//æ£€æŸ¥æ ¡éªŒå’Œæ˜¯å¦æ­£ç¡®
 	int checkSum = pUtils->calculateCheckSum(packet);
 
-	//Èç¹ûĞ£ÑéºÍÕıÈ·£¬Í¬Ê±ÊÕµ½±¨ÎÄµÄĞòºÅµÈÓÚ½ÓÊÕ·½ÆÚ´ıÊÕµ½µÄ±¨ÎÄĞòºÅÒ»ÖÂ
+	//å¦‚æœæ ¡éªŒå’Œæ­£ç¡®ï¼ŒåŒæ—¶æ”¶åˆ°æŠ¥æ–‡çš„åºå·ç­‰äºæ¥æ”¶æ–¹æœŸå¾…æ”¶åˆ°çš„æŠ¥æ–‡åºå·ä¸€è‡´
 	if (checkSum == packet.checksum && this->expectSequenceNumberRcvd == packet.seqnum) {
-		pUtils->printPacket("½ÓÊÕ·½ÕıÈ·ÊÕµ½·¢ËÍ·½µÄ±¨ÎÄ", packet);
+		pUtils->printPacket("æ¥æ”¶æ–¹æ­£ç¡®æ”¶åˆ°å‘é€æ–¹çš„æŠ¥æ–‡", packet);
 
-		//È¡³öMessage£¬ÏòÉÏµİ½»¸øÓ¦ÓÃ²ã
+		//å–å‡ºMessageï¼Œå‘ä¸Šé€’äº¤ç»™åº”ç”¨å±‚
 		Message msg;
 		memcpy(msg.data, packet.payload, sizeof(packet.payload));
 		pns->delivertoAppLayer(RECEIVER, msg);
 
-		lastAckPkt.acknum = packet.seqnum; //È·ÈÏĞòºÅµÈÓÚÊÕµ½µÄ±¨ÎÄĞòºÅ
+		lastAckPkt.acknum = packet.seqnum; //ç¡®è®¤åºå·ç­‰äºæ”¶åˆ°çš„æŠ¥æ–‡åºå·
 		lastAckPkt.checksum = pUtils->calculateCheckSum(lastAckPkt);
-		pUtils->printPacket("½ÓÊÕ·½·¢ËÍÈ·ÈÏ±¨ÎÄ", lastAckPkt);
-		pns->sendToNetworkLayer(SENDER, lastAckPkt);	//µ÷ÓÃÄ£ÄâÍøÂç»·¾³µÄsendToNetworkLayer£¬Í¨¹ıÍøÂç²ã·¢ËÍÈ·ÈÏ±¨ÎÄµ½¶Ô·½
+		pUtils->printPacket("æ¥æ”¶æ–¹å‘é€ç¡®è®¤æŠ¥æ–‡", lastAckPkt);
+		pns->sendToNetworkLayer(SENDER, lastAckPkt);	//è°ƒç”¨æ¨¡æ‹Ÿç½‘ç»œç¯å¢ƒçš„sendToNetworkLayerï¼Œé€šè¿‡ç½‘ç»œå±‚å‘é€ç¡®è®¤æŠ¥æ–‡åˆ°å¯¹æ–¹
 
-		this->expectSequenceNumberRcvd = 1 - this->expectSequenceNumberRcvd; //½ÓÊÕĞòºÅÔÚ0-1Ö®¼äÇĞ»»
+		this->expectSequenceNumberRcvd = 1 - this->expectSequenceNumberRcvd; //æ¥æ”¶åºå·åœ¨0-1ä¹‹é—´åˆ‡æ¢
 	}
 	else {
 		if (checkSum != packet.checksum) {
-			pUtils->printPacket("½ÓÊÕ·½Ã»ÓĞÕıÈ·ÊÕµ½·¢ËÍ·½µÄ±¨ÎÄ,Êı¾İĞ£Ñé´íÎó", packet);
+			pUtils->printPacket("æ¥æ”¶æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°å‘é€æ–¹çš„æŠ¥æ–‡,æ•°æ®æ ¡éªŒé”™è¯¯", packet);
 		}
 		else {
-			pUtils->printPacket("½ÓÊÕ·½Ã»ÓĞÕıÈ·ÊÕµ½·¢ËÍ·½µÄ±¨ÎÄ,±¨ÎÄĞòºÅ²»¶Ô", packet);
+			pUtils->printPacket("æ¥æ”¶æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°å‘é€æ–¹çš„æŠ¥æ–‡,æŠ¥æ–‡åºå·ä¸å¯¹", packet);
 		}
-		pUtils->printPacket("½ÓÊÕ·½ÖØĞÂ·¢ËÍÉÏ´ÎµÄÈ·ÈÏ±¨ÎÄ", lastAckPkt);
-		pns->sendToNetworkLayer(SENDER, lastAckPkt);	//µ÷ÓÃÄ£ÄâÍøÂç»·¾³µÄsendToNetworkLayer£¬Í¨¹ıÍøÂç²ã·¢ËÍÉÏ´ÎµÄÈ·ÈÏ±¨ÎÄ
+		pUtils->printPacket("æ¥æ”¶æ–¹é‡æ–°å‘é€ä¸Šæ¬¡çš„ç¡®è®¤æŠ¥æ–‡", lastAckPkt);
+		pns->sendToNetworkLayer(SENDER, lastAckPkt);	//è°ƒç”¨æ¨¡æ‹Ÿç½‘ç»œç¯å¢ƒçš„sendToNetworkLayerï¼Œé€šè¿‡ç½‘ç»œå±‚å‘é€ä¸Šæ¬¡çš„ç¡®è®¤æŠ¥æ–‡
 
 	}
 }
