@@ -9,8 +9,8 @@
 #include "StopWaitRdtReceiver.h"
 
 #ifdef __linux
-#define INPUT_FILENAME "/home/gao/input.txt"
-#define OUTPUT_FILENAME "/home/gao/output.txt"
+#define INPUT_FILENAME "/home/gao/code/StopWait/input.txt"
+#define OUTPUT_FILENAME "/home/gao/code/StopWait/output.txt"
 #else
 #define INPUT_FILENAME "C:\\Users\\gaome\\Desktop\\input.txt"
 #define OUTPUT_FILENAME "C:\\Users\\gaome\\Desktop\\output.txt"
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 {
 	RdtSender *ps = new StopWaitRdtSender();
 	RdtReceiver * pr = new StopWaitRdtReceiver();
-//	pns->setRunMode(0);  //VERBOS模式
+	// pns->setRunMode(0);  //VERBOS模式
 	pns->setRunMode(1);  //安静模式
 	pns->init();
 	pns->setRtdSender(ps);
