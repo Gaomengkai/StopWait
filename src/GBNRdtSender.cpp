@@ -7,6 +7,8 @@ GBNRdtSender::GBNRdtSender()
 {
     ZEROMEM(pks);
     ZEROMEM(recvOK);
+    this->printer = new SlidingWindowPrinter(WINDOW_SIZE,SEQ_LEN);
+    this->printer->setRedirect("window.txt");
 }
 
 GBNRdtSender::~GBNRdtSender() { }
@@ -67,6 +69,7 @@ void GBNRdtSender::receive(const Packet& ackPkt)
         pns->stopTimer(SENDER, ackNum); //关闭定时器
         this->recvOK[ackNum] = true;
         for (; pStart != pNext && (recvOK[pStart]); pStart = ((pStart + 1) & SEQ_MASK)) {
+            printer->print(recvOK,pStart);
             recvOK[pStart] = false;
         }
         if (((pStart + WINDOW_SIZE) & SEQ_MASK) != pNext)

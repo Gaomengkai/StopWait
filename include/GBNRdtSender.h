@@ -2,6 +2,8 @@
 #define GBN_RDT_SENDER_H
 #include "RdtSender.h"
 
+#include "WindowTool.h"
+
 class GBNRdtSender : public RdtSender {
 private:
     Packet pks[SEQ_LEN];
@@ -12,6 +14,8 @@ private:
     int expectSequenceNumberSend; // 下一个发送序号
     bool isPending; // 是否处于等待Ack的状态
     Packet packetWaitingAck; //已发送并等待Ack的数据包
+
+    SlidingWindowPrinter* printer;
 
 public:
     bool getWaitingState();
