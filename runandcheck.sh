@@ -7,6 +7,7 @@
 # Usage: ./runandcheck.sh
 
 inputfile="input2.txt"
+outputfile="output.txt"
 
 for i in {1..10}
 do
@@ -17,8 +18,8 @@ do
         echo `cat /proc/sys/kernel/random/uuid | md5sum |head -c 20` >> $inputfile
     done
     echo "EOF" >>$inputfile
-    ./bin/gbn -v -i $inputfile>log.log
-    if diff -q $inputfile ./output.txt 
+    ./bin/gbn -v -i $inputfile -o $outputfile>log.log
+    if diff -q $inputfile $outputfile
     then
         echo -e "\e[32mTest $i: Passed\e[0m"
     else
