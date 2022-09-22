@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(StopWait)
+project(GBN)
 
 
 
@@ -8,6 +8,6 @@ add_definitions(-std=c++11)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC_LIST)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-ADD_EXECUTABLE(stop_wait ${SRC_LIST})
+ADD_EXECUTABLE(gbn ${SRC_LIST})
 FIND_LIBRARY(NETSIM_LIB netsim ${PROJECT_SOURCE_DIR}/lib)
-TARGET_LINK_LIBRARIES(stop_wait  ${NETSIM_LIB})
+TARGET_LINK_LIBRARIES(gbn  ${NETSIM_LIB})

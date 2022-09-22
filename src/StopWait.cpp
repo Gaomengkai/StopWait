@@ -5,8 +5,10 @@
 #include "Global.h"
 #include "RdtSender.h"
 #include "RdtReceiver.h"
-#include "StopWaitRdtSender.h"
-#include "StopWaitRdtReceiver.h"
+// #include "StopWaitRdtSender.h"
+// #include "StopWaitRdtReceiver.h"
+#include "GBNRdtReceiver.h"
+#include "GBNRdtSender.h"
 
 #ifdef __linux
 #define INPUT_FILENAME "/home/gao/code/StopWait/input.txt"
@@ -19,10 +21,10 @@
 
 int main(int argc, char* argv[])
 {
-	RdtSender *ps = new StopWaitRdtSender();
-	RdtReceiver * pr = new StopWaitRdtReceiver();
-	// pns->setRunMode(0);  //VERBOS模式
-	pns->setRunMode(1);  //安静模式
+	RdtSender *ps = new GBNRdtSender();
+	RdtReceiver * pr = new GBNRdtReceiver();
+	pns->setRunMode(0);  //VERBOS模式
+	// pns->setRunMode(1);  //安静模式
 	pns->init();
 	pns->setRtdSender(ps);
 	pns->setRtdReceiver(pr);
