@@ -35,7 +35,7 @@ bool StopWaitRdtSender::send(const Message &message) {
 	pns->startTimer(SENDER, Configuration::TIME_OUT,this->packetWaitingAck.seqnum);			//启动发送方定时器
 	pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
 
-	this->waitingState = true;																					//进入等待状态
+	this->waitingState = true;																//进入等待状态
 	return true;
 }
 
@@ -58,7 +58,7 @@ void StopWaitRdtSender::receive(const Packet &ackPkt) {
 			pns->sendToNetworkLayer(RECEIVER, this->packetWaitingAck);								//重新发送数据包
 
 		}
-	}	
+	}
 }
 
 void StopWaitRdtSender::timeoutHandler(int seqNum) {
