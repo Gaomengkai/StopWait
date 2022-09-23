@@ -8,6 +8,9 @@ SlidingWindowPrinter::SlidingWindowPrinter(int windowSize, int seqLen)
     this->windowSize = windowSize;
     this->seqLen = seqLen;
 }
+SlidingWindowPrinter::~SlidingWindowPrinter(){
+    if(fp) fclose(fp);
+}
 bool SlidingWindowPrinter::setRedirect(const char* filename){
     this->fp = fopen(filename,"w");
     if(this->fp) return true;
@@ -44,4 +47,5 @@ void SlidingWindowPrinter::printRecvOK(bool* recvOK, int startNum) {
     p+=sprintf(p,"\n\n");
     printf("%s",buf);
     if(fp) fprintf(fp,"%s",buf);
+    delete buf;
 }

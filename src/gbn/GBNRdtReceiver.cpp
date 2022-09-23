@@ -45,7 +45,7 @@ void GBNRdtReceiver::receive(const Packet &packet) {
 	Packet failAck;
 	failAck.acknum=(expectSequenceNumberRcvd-1+SEQ_LEN)%SEQ_LEN;
 	failAck.seqnum=failAck.acknum;
-	memset(failAck.payload,0,sizeof(failAck.payload));
+	memset(failAck.payload,' ',sizeof(failAck.payload));
 	failAck.checksum=pUtils->calculateCheckSum(failAck);
 	pns->sendToNetworkLayer(SENDER,failAck);
 	pUtils->printPacket("     \e[46m[ERROR][RECV][SEND] ->\e[0m",failAck);

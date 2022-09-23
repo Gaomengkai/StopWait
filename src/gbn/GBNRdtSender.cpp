@@ -1,6 +1,7 @@
 #include "GBNRdtSender.h"
 #include "Global.h"
 #define ZEROMEM(x) memset((x), 0, sizeof(x))
+#define DEBUG_ASSERT(x) if (!(x)) { printf("Assert failed"); exit(1); }
 GBNRdtSender::GBNRdtSender()
     : expectSequenceNumberSend(0)
     , isPending(false)
@@ -11,7 +12,9 @@ GBNRdtSender::GBNRdtSender()
     this->printer->setRedirect("window.txt");
 }
 
-GBNRdtSender::~GBNRdtSender() { }
+GBNRdtSender::~GBNRdtSender() {
+    delete printer;
+ }
 
 /// @brief can continue to send?
 /// @return the window is FULL
@@ -37,7 +40,10 @@ bool GBNRdtSender::send(const Message& message)
 
     memcpy(toSend.payload, message.data, sizeof(message.data));
     toSend.checksum = pUtils->calculateCheckSum(toSend);
-    pns->startTimer(SENDER, Configuration::TIME_OUT, toSend.seqnum); //启动发送方定时器
+    if (toSend.seqnum==pStart) {
+        // only start packet need to be resent
+        pns->startTimer(SENDER, Configuration::TIME_OUT, toSend.seqnum); //启动发送方定时器
+    }
     pns->sendToNetworkLayer(RECEIVER, toSend); //调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
     
     pUtils->printPacket("\e[33m[WARNING][SENDING]\t\e[0m", toSend);
@@ -55,11 +61,13 @@ void GBNRdtSender::receive(const Packet& ackPkt)
     do {
         if (!isCheckSumOK)
             break;
+
 		int end = ((pStart + WINDOW_SIZE) & SEQ_MASK);
 		bool ltS = ackNum<pStart;
 		bool geE = ackNum>=end;
 		if(pStart<end && (ltS||geE)) break;
 		else if(ltS&&geE) break;
+
         pUtils->printPacket("\e[32m[WARNING][SENDER,OK,ACK]\e[0m", ackPkt);
 		for(int i=pStart;i!=ackNum;i+=1,i%=SEQ_LEN){
 			if(!this->recvOK[i]){
@@ -68,9 +76,17 @@ void GBNRdtSender::receive(const Packet& ackPkt)
 		}
         pns->stopTimer(SENDER, ackNum); //关闭定时器
         this->recvOK[ackNum] = true;
+        int oldStart = pStart;
         for (; pStart != pNext && (recvOK[pStart]); pStart = ((pStart + 1) & SEQ_MASK)) {
-            printer->print(recvOK,pStart);
             recvOK[pStart] = false;
+            printer->print(recvOK,pStart);
+        }
+        if (oldStart != pStart) {
+            // stop old timer and start a new timer
+            pns->stopTimer(SENDER, oldStart);
+            if (pStart != pNext) {
+                pns->startTimer(SENDER, Configuration::TIME_OUT, pStart);
+            }
         }
         if (((pStart + WINDOW_SIZE) & SEQ_MASK) != pNext)
             this->isPending = false;
@@ -81,9 +97,13 @@ void GBNRdtSender::receive(const Packet& ackPkt)
 
 void GBNRdtSender::timeoutHandler(int seqNum)
 {
-    //唯一一个定时器,无需考虑seqNum
+    //唯一一个定时器,需考虑seqNum
     pUtils->printPacket("\e[33m[WARNING][TIMER][RESEND]\e[0m", this->pks[seqNum]);
     pns->stopTimer(SENDER, seqNum); //首先关闭定时器
     pns->startTimer(SENDER, Configuration::TIME_OUT, seqNum); //重新启动发送方定时器
-    pns->sendToNetworkLayer(RECEIVER, this->pks[seqNum]); //重新发送数据包
+    // resend all packets from pStart to pNext
+    for (int i = pStart; i != pNext; i = ((i + 1) & SEQ_MASK)) {
+        pns->sendToNetworkLayer(RECEIVER, this->pks[i]);
+    }
+    DEBUG_ASSERT(pStart == seqNum);
 }

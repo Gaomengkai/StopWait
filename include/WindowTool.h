@@ -18,6 +18,7 @@ class SlidingWindowPrinter {
     // F T - - - - F F
 public:
     SlidingWindowPrinter(int windowSize, int seqLen);
+    ~SlidingWindowPrinter();
     void print(bool* recvOK, int startNum);
     bool setRedirect(const char* filename);
 private:
