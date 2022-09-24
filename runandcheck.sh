@@ -4,7 +4,9 @@
 
 # Description: This script will run ./bin/gbn for 100 times and check if the output is correct.
 
-# Usage: ./runandcheck.sh
+# Usage: ./runandcheck.sh [gbn|stopwait|sr]
+
+[ ! $1 ] && echo "Usage: ./runandcheck.sh [gbn|stopwait|sr]" && exit 1
 
 inputfile="input2.txt"
 outputfile="output.txt"
